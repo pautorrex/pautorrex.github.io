@@ -31,7 +31,8 @@
   .acad-section{padding:5rem 2rem;max-width:860px;margin:0 auto;}
   .acad-section+.acad-section{border-top:1px solid var(--border);}
   h2.sh{font-size:1.7rem;color:var(--navy);margin-bottom:2rem;}
-  h2.sh span{display:block;width:40px;height:3px;background:var(--accent);margin-top:8px;}
+  .section-copy{display:block;}
+  .section-line{display:block;width:40px;height:3px;background:var(--accent);margin-top:8px;}
 
   #hero{min-height:80vh;display:flex;flex-direction:column;justify-content:center;max-width:860px;margin:0 auto;padding:4rem 2rem;}
   .hero-tag{font-family:'Arial',sans-serif;font-size:.85rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;}
@@ -53,10 +54,14 @@
   .timeline .inst{color:var(--muted);font-size:.82rem;display:block;}
   @media(max-width:600px){.about-grid{grid-template-columns:1fr;}}
 
-  .pub-item{padding:1.2rem 0;border-bottom:1px solid var(--border);}
-  .pub-title{font-size:1rem;color:var(--navy);margin-bottom:.3rem;}
-  .pub-meta{font-family:'Arial',sans-serif;font-size:.83rem;color:var(--muted);}
-  .pub-status{display:inline-block;margin-top:.4rem;padding:2px 8px;border-radius:20px;font-family:'Arial',sans-serif;font-size:.75rem;}
+  .pub-list{display:grid;gap:1rem;}
+  .pub-item{padding:1.35rem 1.5rem;border:1px solid var(--border);border-radius:14px;background:linear-gradient(180deg,#fff 0%,#fbfcff 100%);box-shadow:0 10px 26px rgba(26,39,68,.04);}
+  .pub-title{font-size:1rem;color:var(--navy);margin-bottom:.35rem;line-height:1.5;}
+  .pub-meta{font-family:'Arial',sans-serif;font-size:.83rem;color:var(--muted);line-height:1.6;}
+  .pub-links{margin-top:.55rem;}
+  .pub-link{display:inline-flex;align-items:center;gap:.35rem;font-family:'Arial',sans-serif;font-size:.82rem;font-weight:600;color:var(--accent);}
+  .pub-link:hover{color:var(--navy);text-decoration:none;}
+  .pub-status{display:inline-block;margin-top:.8rem;padding:3px 9px;border-radius:999px;font-family:'Arial',sans-serif;font-size:.75rem;}
   .pub-status-review{background:#fef3c7;color:#92400e;}
   .pub-status-forth{background:#ede9fe;color:#5b21b6;}
   .pub-status-pub{background:#d1fae5;color:#065f46;}
@@ -86,7 +91,10 @@
   .form-group textarea{resize:vertical;min-height:100px;}
   .submit-btn{background:var(--navy);color:#fff;border:none;padding:10px 24px;border-radius:4px;font-family:'Arial',sans-serif;font-size:.9rem;cursor:pointer;transition:background .2s;}
   .submit-btn:hover{background:var(--accent);}
-  @media(max-width:600px){.contact-grid{grid-template-columns:1fr;}}
+  @media(max-width:600px){
+    .contact-grid{grid-template-columns:1fr;}
+    .pub-item{padding:1.1rem 1rem;}
+  }
   footer.acad-footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:2rem;font-family:'Arial',sans-serif;font-size:.82rem;}
 
   nav.blog-nav{position:sticky;top:0;z-index:100;background:var(--blog-nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
@@ -154,7 +162,7 @@
 </section>
 
 <div class="acad-section" id="about">
-  <h2 class="sh" data-i="about_title">About me <span></span></h2>
+  <h2 class="sh"><span class="section-copy" data-i="about_title">About me</span><span class="section-line"></span></h2>
   <div class="about-grid">
     <div class="about-bio" data-i="about_bio">I am a predoctoral researcher at Universitat Pompeu Fabra working on territorial identities, nationalism, and secessionism. My research combines qualitative and quantitative methods to examine how education, literacy, and generational change shape political identities in stateless nations.<br><br>I have presented my work at international conferences and published in journals such as <em>Territory, Politics, and Governance</em> and <em>South European Politics and Society</em>. I have also been a visiting researcher at Georgetown University.</div>
     <ul class="timeline">
@@ -169,65 +177,67 @@
 </div>
 
 <div class="acad-section" id="publications">
-  <h2 class="sh" data-i="pub_title">Publications <span></span></h2>
+  <h2 class="sh"><span class="section-copy" data-i="pub_title">Publications</span><span class="section-line"></span></h2>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p1_title">"Literacy and the Spread of Stateless Nationalisms"</div>
-    <div class="pub-meta">Pau Torres</div>
-    <span class="pub-status pub-status-review" data-i="under_review">Under review</span>
-  </div>
+  <div class="pub-list">
+    <article class="pub-item">
+      <div class="pub-title" data-i="p1_title">"Literacy and the Spread of Stateless Nationalisms"</div>
+      <div class="pub-meta">Pau Torres</div>
+      <span class="pub-status pub-status-review" data-i="under_review">Under review</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p2_title">"Teaching the Region: How Decentralized Education Shapes Territorial Identity in Spain"</div>
-    <div class="pub-meta">Pau Torres</div>
-    <span class="pub-status pub-status-forth" data-i="forthcoming">Forthcoming</span>
-  </div>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p2_title">"Teaching the Region: How Decentralized Education Shapes Territorial Identity in Spain"</div>
+      <div class="pub-meta">Pau Torres</div>
+      <span class="pub-status pub-status-forth" data-i="forthcoming">Forthcoming</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p3_title">"Claiming the Isle? Islandness and Territorial Demands"</div>
-    <div class="pub-meta">Pau Torres &amp; Marc Sanjaume-Calvet</div>
-    <span class="pub-status pub-status-forth" data-i="forthcoming">Forthcoming</span>
-  </div>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p3_title">"Claiming the Isle? Islandness and Territorial Demands"</div>
+      <div class="pub-meta">Pau Torres &amp; Marc Sanjaume-Calvet</div>
+      <span class="pub-status pub-status-forth" data-i="forthcoming">Forthcoming</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p4_title">"Failed Secession, Strategic Renewal: Lessons from the Catalan Nationalist Right (1974–2024)"</div>
-    <div class="pub-meta">Alvariño, Soler-Buades &amp; Pau Torres · <em>Territory, Politics, and Governance</em> · 2026</div>
-    <div class="pub-links">
-      <a href="POSA_AQUI_EL_DOI" target="_blank" class="pub-link" data-i="pub_link">→ View article</a>
-    </div>
-    <span class="pub-status pub-status-pub" data-i="published">Published</span>
-  </div>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p4_title">"Failed Secession, Strategic Renewal: Lessons from the Catalan Nationalist Right (1974–2024)"</div>
+      <div class="pub-meta">Alvariño, Soler-Buades &amp; Pau Torres · <em>Territory, Politics, and Governance</em> · 2026</div>
+      <div class="pub-links">
+        <a href="POSA_AQUI_EL_DOI" target="_blank" rel="noreferrer" class="pub-link" data-i="pub_link">→ View article</a>
+      </div>
+      <span class="pub-status pub-status-pub" data-i="published">Published</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p5_title">"A case of top-down intergovernmentalism? The Spanish bilateral cooperation commissions"</div>
-    <div class="pub-meta">Marc Sanjaume et al. · <em>South European Politics and Society</em> · 2025</div>
-    <div class="pub-links">
-      <a href="POSA_AQUI_EL_DOI" target="_blank" class="pub-link" data-i="pub_link">→ View article</a>
-    </div>
-    <span class="pub-status pub-status-pub" data-i="published">Published</span>
-  </div>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p5_title">"A case of top-down intergovernmentalism? The Spanish bilateral cooperation commissions"</div>
+      <div class="pub-meta">Marc Sanjaume et al. · <em>South European Politics and Society</em> · 2025</div>
+      <div class="pub-links">
+        <a href="POSA_AQUI_EL_DOI" target="_blank" rel="noreferrer" class="pub-link" data-i="pub_link">→ View article</a>
+      </div>
+      <span class="pub-status pub-status-pub" data-i="published">Published</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p6_title">"The (re)emergence of Catalan secessionism through the generational lens"</div>
-    <div class="pub-meta">Pau Torres &amp; Marc Sanjaume-Calvet · In: Gagnon &amp; Turgeon (eds.), <em>Generations and Nationalism</em>, Routledge · 2025</div>
-    <div class="pub-links">
-      <a href="POSA_AQUI_EL_DOI" target="_blank" class="pub-link" data-i="pub_link">→ View article</a>
-    </div>
-    <span class="pub-status pub-status-pub" data-i="published">Published</span>
-  </div>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p6_title">"The (re)emergence of Catalan secessionism through the generational lens"</div>
+      <div class="pub-meta">Pau Torres &amp; Marc Sanjaume-Calvet · In: Gagnon &amp; Turgeon (eds.), <em>Generations and Nationalism</em>, Routledge · 2025</div>
+      <div class="pub-links">
+        <a href="POSA_AQUI_EL_DOI" target="_blank" rel="noreferrer" class="pub-link" data-i="pub_link">→ View article</a>
+      </div>
+      <span class="pub-status pub-status-pub" data-i="published">Published</span>
+    </article>
 
-  <div class="pub-item">
-    <div class="pub-title" data-i="p7_title">"Sleeping Dogs: Quebec and the Stabilization of Canadian Federalism after 1995"</div>
-    <div class="pub-meta">Pau Torres · <em>Regional &amp; Federal Studies</em> · 2024</div>
-    <div class="pub-links">
-      <a href="POSA_AQUI_EL_DOI" target="_blank" class="pub-link" data-i="pub_link">→ View article</a>
-    </div>
-    <span class="pub-status pub-status-pub" data-i="published">Published</span>
+    <article class="pub-item">
+      <div class="pub-title" data-i="p7_title">"Sleeping Dogs: Quebec and the Stabilization of Canadian Federalism after 1995"</div>
+      <div class="pub-meta">Pau Torres · <em>Regional &amp; Federal Studies</em> · 2024</div>
+      <div class="pub-links">
+        <a href="POSA_AQUI_EL_DOI" target="_blank" rel="noreferrer" class="pub-link" data-i="pub_link">→ View article</a>
+      </div>
+      <span class="pub-status pub-status-pub" data-i="published">Published</span>
+    </article>
   </div>
 </div>
 
 <div class="acad-section" id="teaching">
-  <h2 class="sh" data-i="teach_title">Teaching <span></span></h2>
+  <h2 class="sh"><span class="section-copy" data-i="teach_title">Teaching</span><span class="section-line"></span></h2>
   <ul class="teaching-list">
     <li>Seminars: <em data-i="t1">Theory of Political Institutions</em><span class="t-year">2024–2025 · BA Political Science, UPF</span></li>
     <li>Seminars: <em data-i="t2">Economics and Democracy</em><span class="t-year">2024–2025 · BA Political Science, UPF</span></li>
@@ -238,7 +248,7 @@
 </div>
 
 <div class="acad-section" id="research">
-  <h2 class="sh" data-i="res_title">Research Interests <span></span></h2>
+  <h2 class="sh"><span class="section-copy" data-i="res_title">Research Interests</span><span class="section-line"></span></h2>
   <div class="projects-grid">
     <div class="project-card">
       <h3 data-i="proj1_title">Territorial Identities</h3>
@@ -259,7 +269,7 @@
 </div>
 
 <div class="acad-section" id="contact">
-  <h2 class="sh" data-i="contact_title">Contact <span></span></h2>
+  <h2 class="sh"><span class="section-copy" data-i="contact_title">Contact</span><span class="section-line"></span></h2>
   <div class="contact-grid">
     <div class="contact-info">
       <p data-i="contact_desc">Feel free to get in touch for academic collaborations, conference inquiries, or any questions about my research.</p>
