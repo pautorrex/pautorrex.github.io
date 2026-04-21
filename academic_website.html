@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dr. Jane Smith</title>
+<style>
+  :root {
+    --navy:#1a2744;--accent:#2e5299;--light:#f7f8fc;--text:#222;
+    --muted:#6b7280;--border:#e5e7eb;--white:#fff;
+    --blog-bg:#faf9f6;--blog-accent:#b45309;--blog-nav:#2d2016;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Georgia',serif;color:var(--text);background:var(--white);scroll-behavior:smooth;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* ── VIEWS ── */
+  #view-academic{display:block;}
+  #view-blog{display:none;}
+  #view-post{display:none;}
+
+  /* ══════════════ ACADEMIC NAV ══════════════ */
+  nav.acad-nav{
+    position:sticky;top:0;z-index:100;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 2rem;height:60px;
+  }
+  .nav-logo{font-size:1.1rem;font-weight:bold;letter-spacing:.03em;color:#fff;}
+  .nav-links{display:flex;gap:1.4rem;align-items:center;}
+  .nav-links a{color:rgba(255,255,255,.85);font-family:'Arial',sans-serif;font-size:.88rem;letter-spacing:.04em;}
+  .nav-links a:hover{color:#fff;text-decoration:none;}
+  .blog-nav-btn{
+    background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.4);
+    color:#fff;padding:5px 14px;border-radius:20px;cursor:pointer;
+    font-size:.82rem;font-family:'Arial',sans-serif;letter-spacing:.05em;transition:all .2s;
+  }
+  .blog-nav-btn:hover{background:rgba(255,255,255,.25);}
+  .lang-btn{
+    background:transparent;border:1.5px solid rgba(255,255,255,.5);
+    color:#fff;padding:4px 12px;border-radius:20px;cursor:pointer;
+    font-size:.82rem;font-family:'Arial',sans-serif;letter-spacing:.06em;transition:all .2s;
+  }
+  .lang-btn:hover{background:rgba(255,255,255,.15);border-color:#fff;}
+
+  /* ══════════════ ACADEMIC CONTENT ══════════════ */
+  .acad-section{padding:5rem 2rem;max-width:860px;margin:0 auto;}
+  .acad-section+.acad-section{border-top:1px solid var(--border);}
+  h2.sh{font-size:1.7rem;color:var(--navy);margin-bottom:2rem;}
+  h2.sh span{display:block;width:40px;height:3px;background:var(--accent);margin-top:8px;}
+
+  /* hero */
+  #hero{min-height:80vh;display:flex;flex-direction:column;justify-content:center;max-width:860px;margin:0 auto;padding:4rem 2rem;}
+  .hero-tag{font-family:'Arial',sans-serif;font-size:.85rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:1rem;}
+  #hero h1{font-size:clamp(2.2rem,5vw,3.2rem);color:var(--navy);line-height:1.15;margin-bottom:1rem;}
+  #hero .subtitle{font-size:1.15rem;color:var(--muted);margin-bottom:2rem;font-family:'Arial',sans-serif;}
+  .hero-links{display:flex;gap:1rem;flex-wrap:wrap;}
+  .btn{display:inline-block;padding:10px 22px;border-radius:4px;font-family:'Arial',sans-serif;font-size:.9rem;transition:all .2s;}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-primary:hover{background:var(--accent);text-decoration:none;}
+  .btn-outline{border:1.5px solid var(--navy);color:var(--navy);}
+  .btn-outline:hover{background:var(--navy);color:#fff;text-decoration:none;}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+  .about-bio{font-size:1rem;line-height:1.8;color:#444;}
+  .timeline{list-style:none;}
+  .timeline li{padding:.6rem 0 .6rem 1.2rem;border-left:2px solid var(--border);position:relative;font-family:'Arial',sans-serif;font-size:.88rem;}
+  .timeline li::before{content:'';position:absolute;left:-5px;top:12px;width:8px;height:8px;background:var(--accent);border-radius:50%;}
+  .timeline .year{color:var(--accent);font-weight:bold;display:block;}
+  .timeline .inst{color:var(--muted);font-size:.82rem;}
+  @media(max-width:600px){.about-grid{grid-template-columns:1fr;}}
+
+  /* publications */
+  .pub-item{padding:1.2rem 0;border-bottom:1px solid var(--border);}
+  .pub-title{font-size:1rem;color:var(--navy);margin-bottom:.3rem;}
+  .pub-meta{font-family:'Arial',sans-serif;font-size:.83rem;color:var(--muted);}
+  .pub-abstract{display:none;margin-top:.7rem;font-size:.9rem;color:#555;line-height:1.7;}
+  .pub-toggle{background:none;border:none;color:var(--accent);font-size:.82rem;font-family:'Arial',sans-serif;cursor:pointer;margin-top:.5rem;padding:0;}
+
+  /* research */
+  .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;}
+  .project-card{border:1px solid var(--border);border-radius:6px;padding:1.4rem;transition:box-shadow .2s;}
+  .project-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);}
+  .project-card h3{font-size:1rem;color:var(--navy);margin-bottom:.5rem;}
+  .project-card p{font-family:'Arial',sans-serif;font-size:.85rem;color:#555;line-height:1.6;}
+  .badge{display:inline-block;margin-top:.8rem;padding:3px 10px;border-radius:20px;font-family:'Arial',sans-serif;font-size:.75rem;}
+  .badge-ongoing{background:#dbeafe;color:#1d4ed8;}
+  .badge-completed{background:#d1fae5;color:#065f46;}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+  .contact-info p{font-family:'Arial',sans-serif;font-size:.92rem;color:#555;line-height:1.8;margin-bottom:1rem;}
+  .contact-links{display:flex;flex-direction:column;gap:.5rem;}
+  .contact-links a{font-family:'Arial',sans-serif;font-size:.88rem;color:var(--accent);}
+  .form-group{margin-bottom:1rem;}
+  .form-group label{display:block;font-family:'Arial',sans-serif;font-size:.83rem;color:var(--muted);margin-bottom:4px;}
+  .form-group input,.form-group textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:4px;font-family:'Georgia',serif;font-size:.9rem;transition:border-color .2s;}
+  .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--accent);}
+  .form-group textarea{resize:vertical;min-height:100px;}
+  .submit-btn{background:var(--navy);color:#fff;border:none;padding:10px 24px;border-radius:4px;font-family:'Arial',sans-serif;font-size:.9rem;cursor:pointer;transition:background .2s;}
+  .submit-btn:hover{background:var(--accent);}
+  @media(max-width:600px){.contact-grid{grid-template-columns:1fr;}}
+
+  footer.acad-footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:2rem;font-family:'Arial',sans-serif;font-size:.82rem;}
+
+  /* ══════════════ BLOG NAV ══════════════ */
+  nav.blog-nav{
+    position:sticky;top:0;z-index:100;background:var(--blog-nav);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 2rem;height:60px;
+  }
+  .blog-nav-logo{font-family:'Georgia',serif;font-size:1.2rem;color:#fff;letter-spacing:.02em;}
+  .blog-nav-logo span{color:#d97706;font-style:italic;}
+  .blog-back-btn{
+    background:transparent;border:1.5px solid rgba(255,255,255,.4);
+    color:rgba(255,255,255,.85);padding:5px 14px;border-radius:20px;cursor:pointer;
+    font-size:.82rem;font-family:'Arial',sans-serif;letter-spacing:.05em;transition:all .2s;
+  }
+  .blog-back-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .blog-nav-right{display:flex;gap:.8rem;align-items:center;}
+  .lang-btn-blog{
+    background:transparent;border:1.5px solid rgba(255,255,255,.4);
+    color:rgba(255,255,255,.85);padding:4px 12px;border-radius:20px;cursor:pointer;
+    font-size:.82rem;font-family:'Arial',sans-serif;letter-spacing:.06em;transition:all .2s;
+  }
+  .lang-btn-blog:hover{background:rgba(255,255,255,.1);border-color:#fff;color:#fff;}
+
+  /* ══════════════ BLOG LIST ══════════════ */
+  #view-blog{background:var(--blog-bg);min-height:100vh;}
+  .blog-header{max-width:720px;margin:0 auto;padding:4rem 2rem 2rem;}
+  .blog-header h1{font-size:2.2rem;color:var(--blog-nav);margin-bottom:.6rem;}
+  .blog-header p{font-family:'Arial',sans-serif;color:var(--muted);font-size:.95rem;}
+  .blog-disclaimer{
+    max-width:720px;margin:0 auto 2rem;padding:0 2rem;
+    display:flex;align-items:flex-start;gap:.6rem;
+    font-family:'Arial',sans-serif;font-size:.82rem;color:#92400e;
+  }
+  .blog-disclaimer-box{background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:.7rem 1rem;display:flex;gap:.5rem;align-items:flex-start;}
+  .blog-posts{max-width:720px;margin:0 auto;padding:0 2rem 5rem;}
+  .blog-card{
+    background:#fff;border:1px solid #e8e0d4;border-radius:8px;
+    padding:1.8rem;margin-bottom:1.4rem;cursor:pointer;
+    transition:box-shadow .2s,transform .15s;
+  }
+  .blog-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.09);transform:translateY(-2px);}
+  .blog-card-tag{font-family:'Arial',sans-serif;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blog-accent);margin-bottom:.5rem;}
+  .blog-card h2{font-size:1.2rem;color:var(--blog-nav);margin-bottom:.5rem;line-height:1.35;}
+  .blog-card .excerpt{font-family:'Arial',sans-serif;font-size:.88rem;color:#666;line-height:1.65;margin-bottom:.8rem;}
+  .blog-card-meta{font-family:'Arial',sans-serif;font-size:.78rem;color:var(--muted);}
+  .read-more{color:var(--blog-accent);font-family:'Arial',sans-serif;font-size:.83rem;font-weight:bold;}
+
+  /* ══════════════ SINGLE POST ══════════════ */
+  #view-post{background:var(--blog-bg);min-height:100vh;}
+  .post-container{max-width:680px;margin:0 auto;padding:3rem 2rem 5rem;}
+  .post-back{background:none;border:none;color:var(--blog-accent);font-family:'Arial',sans-serif;font-size:.85rem;cursor:pointer;margin-bottom:2rem;padding:0;display:flex;align-items:center;gap:.3rem;}
+  .post-back:hover{text-decoration:underline;}
+  .post-tag{font-family:'Arial',sans-serif;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blog-accent);margin-bottom:.7rem;}
+  .post-title{font-size:2rem;color:var(--blog-nav);line-height:1.2;margin-bottom:.8rem;}
+  .post-meta{font-family:'Arial',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #e8e0d4;}
+  .post-body{font-size:1.05rem;line-height:1.85;color:#333;}
+  .post-body p{margin-bottom:1.3rem;}
+  .post-body h3{font-size:1.2rem;color:var(--blog-nav);margin:2rem 0 .7rem;}
+  footer.blog-footer{background:var(--blog-nav);color:rgba(255,255,255,.55);text-align:center;padding:1.5rem;font-family:'Arial',sans-serif;font-size:.8rem;}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║       ACADEMIC VIEW          ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="view-academic">
+<nav class="acad-nav">
+  <div class="nav-logo">Dr. Jane Smith</div>
+  <div class="nav-links">
+    <a href="#about" data-i="nav_about">About</a>
+    <a href="#publications" data-i="nav_pub">Publications</a>
+    <a href="#research" data-i="nav_res">Research</a>
+    <a href="#contact" data-i="nav_contact">Contact</a>
+    <button class="blog-nav-btn" id="goToBlog" data-i="nav_blog">✍ Blog</button>
+    <button class="lang-btn" id="langBtn">CA</button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-tag" data-i="hero_tag">Researcher · Academic · Author</div>
+  <h1>Dr. Jane Smith</h1>
+  <p class="subtitle" data-i="hero_sub">Associate Professor of Linguistics at the University of Barcelona</p>
+  <div class="hero-links">
+    <a href="#about" class="btn btn-primary" data-i="hero_btn1">View CV</a>
+    <a href="#contact" class="btn btn-outline" data-i="hero_btn2">Get in touch</a>
+  </div>
+</section>
+
+<div class="acad-section" id="about">
+  <h2 class="sh" data-i="about_title">About me <span></span></h2>
+  <div class="about-grid">
+    <div class="about-bio" data-i="about_bio">I am a researcher specialising in computational linguistics and language acquisition. My work focuses on the intersection of cognitive science and natural language processing.<br><br>I have published extensively in peer-reviewed journals and presented at international conferences across Europe and North America.</div>
+    <ul class="timeline">
+      <li><span class="year">2018–present</span>Associate Professor, University of Barcelona<span class="inst" data-i="dept">Department of Linguistics</span></li>
+      <li><span class="year">2014–2018</span>Postdoctoral Researcher, MIT<span class="inst">Brain and Cognitive Sciences</span></li>
+      <li><span class="year">2010–2014</span>PhD in Linguistics, Oxford University<span class="inst" data-i="phd_thesis">Thesis: "Contextual Disambiguation in NLP"</span></li>
+      <li><span class="year">2007–2010</span>BA &amp; MA, University of Barcelona<span class="inst" data-i="ba_major">Major: Catalan and Spanish Philology</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="acad-section" id="publications">
+  <h2 class="sh" data-i="pub_title">Publications <span></span></h2>
+  <div class="pub-item">
+    <div class="pub-title">Contextual Ambiguity in Multilingual Neural Models (2024)</div>
+    <div class="pub-meta">Journal of Computational Linguistics · Vol. 50, pp. 112–138</div>
+    <button class="pub-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+    <div class="pub-abstract" data-i="abstract1">This paper investigates how large language models handle contextual ambiguity across multilingual settings, with a focus on Romance languages.</div>
+  </div>
+  <div class="pub-item">
+    <div class="pub-title">Prosodic Cues in Second Language Acquisition (2022)</div>
+    <div class="pub-meta">Language Learning · Vol. 72, pp. 45–89</div>
+    <button class="pub-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+    <div class="pub-abstract" data-i="abstract2">An empirical study of how adult learners of Catalan use prosodic information during speech perception.</div>
+  </div>
+  <div class="pub-item">
+    <div class="pub-title">Discourse Coherence and Reading Comprehension (2020)</div>
+    <div class="pub-meta">Applied Psycholinguistics · Vol. 41, pp. 789–812</div>
+    <button class="pub-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+    <div class="pub-abstract" data-i="abstract3">This study examines the role of discourse coherence markers in reading comprehension across three age groups.</div>
+  </div>
+</div>
+
+<div class="acad-section" id="research">
+  <h2 class="sh" data-i="res_title">Research Projects <span></span></h2>
+  <div class="projects-grid">
+    <div class="project-card"><h3 data-i="proj1_title">MultiLing-AI</h3><p data-i="proj1_desc">Developing evaluation frameworks for multilingual AI systems, funded by the European Research Council.</p><span class="badge badge-ongoing" data-i="ongoing">Ongoing</span></div>
+    <div class="project-card"><h3 data-i="proj2_title">CatAcquis</h3><p data-i="proj2_desc">Longitudinal study of Catalan acquisition in bilingual children aged 3–7 in the Barcelona metropolitan area.</p><span class="badge badge-ongoing" data-i="ongoing">Ongoing</span></div>
+    <div class="project-card"><h3 data-i="proj3_title">CohereRead</h3><p data-i="proj3_desc">Investigating discourse coherence effects on reading strategies using eye-tracking methodology.</p><span class="badge badge-completed" data-i="completed">Completed</span></div>
+  </div>
+</div>
+
+<div class="acad-section" id="contact">
+  <h2 class="sh" data-i="contact_title">Contact <span></span></h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p data-i="contact_desc">I am happy to hear from fellow researchers, students, journalists, or anyone interested in my work.</p>
+      <div class="contact-links">
+        <a href="mailto:jane.smith@ub.edu">✉ jane.smith@ub.edu</a>
+        <a href="#">🔗 ORCID Profile</a>
+        <a href="#">🔗 Google Scholar</a>
+        <a href="#">🔗 ResearchGate</a>
+      </div>
+    </div>
+    <div>
+      <div class="form-group"><label data-i="form_name">Name</label><input type="text" data-i_placeholder="form_name_ph" placeholder="Your name"/></div>
+      <div class="form-group"><label data-i="form_email">Email</label><input type="email" placeholder="your@email.com"/></div>
+      <div class="form-group"><label data-i="form_msg">Message</label><textarea data-i_placeholder="form_msg_ph" placeholder="Your message..."></textarea></div>
+      <button class="submit-btn" data-i="form_send">Send message</button>
+    </div>
+  </div>
+</div>
+
+<footer class="acad-footer"><span data-i="footer">© 2025 Dr. Jane Smith · University of Barcelona</span></footer>
+</div><!-- /view-academic -->
+
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║         BLOG LIST VIEW       ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="view-blog">
+<nav class="blog-nav">
+  <div class="blog-nav-logo">Jane Smith · <span data-i="blog_word">Blog</span></div>
+  <div class="blog-nav-right">
+    <button class="blog-back-btn" id="goToAcademic" data-i="blog_back">← Academic site</button>
+    <button class="lang-btn-blog" id="langBtnBlog">CA</button>
+  </div>
+</nav>
+<div class="blog-header">
+  <h1 data-i="blog_title">Writing</h1>
+  <p data-i="blog_subtitle">Personal essays, observations and ideas — separate from my academic work.</p>
+</div>
+<div class="blog-posts" id="blogList"></div>
+<footer class="blog-footer"><span data-i="blog_footer">© 2025 Jane Smith</span></footer>
+</div><!-- /view-blog -->
+
+
+<!-- ╔══════════════════════════════╗ -->
+<!-- ║       SINGLE POST VIEW       ║ -->
+<!-- ╚══════════════════════════════╝ -->
+<div id="view-post">
+<nav class="blog-nav">
+  <div class="blog-nav-logo">Jane Smith · <span data-i="blog_word">Blog</span></div>
+  <div class="blog-nav-right">
+    <button class="blog-back-btn" id="goToBlogList" data-i="blog_back_list">← All posts</button>
+    <button class="lang-btn-blog" id="langBtnPost">CA</button>
+  </div>
+</nav>
+<div class="post-container" id="postContent"></div>
+<footer class="blog-footer"><span data-i="blog_footer">© 2025 Jane Smith</span></footer>
+</div><!-- /view-post -->
+
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const posts = [
+  {
+    id: 1,
+    tag: { en: "Language", ca: "Llengua" },
+    title: { en: "Why I fell in love with Catalan", ca: "Per què em vaig enamorar del català" },
+    date: "12 April 2025",
+    excerpt: {
+      en: "A personal reflection on discovering a language that felt both ancient and urgently alive — and what it taught me about belonging.",
+      ca: "Una reflexió personal sobre descobrir una llengua que semblava alhora antiga i urgentment viva, i el que em va ensenyar sobre el sentiment de pertinença."
+    },
+    body: {
+      en: `<p>The first time I heard Catalan spoken naturally — not in a classroom, not in a phrasebook — I was sitting at a bar in the Gràcia neighbourhood of Barcelona. It was 2008, and I had come for a semester abroad.</p><p>There was something about the sound of it: the open vowels, the way syllables seemed to tumble over each other with an urgency that Spanish did not quite have. I leaned in, involuntarily, the way you do when you hear music you can't quite place but recognise as beautiful.</p><h3>A language with stakes</h3><p>What drew me deeper was not just the phonetics but the politics. Catalan is not merely a regional curiosity — it is a living argument about identity, about survival, about what it means for a community to say: <em>we exist, and we speak.</em></p><p>As a linguist, I had studied endangered languages in the abstract. Here was one in the window of the café, on the sign above the door, in the mouths of children walking home from school.</p><p>I enrolled in a course the following week. I never really left.</p>`,
+      ca: `<p>La primera vegada que vaig sentir parlar català de manera natural — no en una aula, no en un manual — era asseguda en un bar del barri de Gràcia, a Barcelona. Era el 2008 i havia vingut per fer un semestre d'intercanvi.</p><p>Hi havia alguna cosa en el so: les vocals obertes, la manera com les síl·labes semblaven precipitar-se les unes sobre les altres amb una urgència que el castellà no tenia del tot. Em vaig inclinar endavant, involuntàriament, com quan escoltes música que no pots identificar del tot però que reconèixes com a bella.</p><h3>Una llengua en joc</h3><p>El que em va atreure més profundament no eren només la fonètica sinó la política. El català no és simplement una curiositat regional — és un argument viu sobre la identitat, sobre la supervivència, sobre el que significa que una comunitat digui: <em>existim, i parlem.</em></p><p>Com a lingüista, havia estudiat les llengües en perill de manera abstracta. Aquí en tenia una davant la finestra del cafè, al rètol sobre la porta, en la boca dels nens que tornaven a casa de l'escola.</p><p>Em vaig apuntar a un curs la setmana següent. En realitat, mai no me'n vaig anar.</p>`
+    }
+  },
+  {
+    id: 2,
+    tag: { en: "Academia", ca: "Acadèmia" },
+    title: { en: "The loneliness no one talks about in a PhD", ca: "La solitud de la que ningú parla en un doctorat" },
+    date: "3 February 2025",
+    excerpt: {
+      en: "Nobody prepares you for the strange silence of spending years on a question only you seem to care about — and how that shapes you.",
+      ca: "Ningú et prepara per al silenci estrany de passar anys en una pregunta de la qual sembla que només tu t'importes, i com això et forma."
+    },
+    body: {
+      en: `<p>There is a particular kind of loneliness that comes with doctoral research. It is not the loneliness of having no one around — supervisors, colleagues and seminars are plentiful. It is the loneliness of a very specific obsession that very few people share.</p><p>My thesis was on contextual disambiguation in natural language processing. At dinner parties, people would nod politely and change the subject. At family gatherings, I learned to say simply "computers and language" and leave it there.</p><h3>Sitting with uncertainty</h3><p>The harder part was not the social awkwardness but the epistemic solitude. Every researcher knows the feeling: you are the only person in the world who has read enough of the literature to know exactly how open your question still is. That is terrifying and exhilarating in equal measure.</p><p>I emerged from my PhD changed in ways I am still mapping. More comfortable with ambiguity. More patient with slow processes. More suspicious of clean conclusions. These are, I think, useful qualities — in research and in life.</p>`,
+      ca: `<p>Hi ha un tipus particular de solitud que ve amb la recerca doctoral. No és la solitud de no tenir ningú al voltant — hi ha supervisors, col·legues i seminaris de sobres. És la solitud d'una obsessió molt específica que molt poca gent comparteix.</p><p>La meva tesi tractava sobre la desambiguació contextual en el processament del llenguatge natural. A les reunions socials, la gent assentia educadament i canviava de tema. A les trobades familiars, vaig aprendre a dir simplement "ordinadors i llengua" i deixar-ho aquí.</p><h3>Conviure amb la incertesa</h3><p>La part més difícil no era la incomoditat social sinó la solitud epistèmica. Tot investigador coneix la sensació: ets l'única persona del món que ha llegit prou literatura per saber exactament com d'oberta és encara la teva pregunta. Això és terrorífic i emocionant a parts iguals.</p><p>Vaig sortir del doctorat canviada de maneres que encara estic cartografiant. Més còmoda amb l'ambigüitat. Més pacient amb els processos lents. Més desconfiada de les conclusions netes. Aquestes són, crec, qualitats útils — en la recerca i en la vida.</p>`
+    }
+  },
+  {
+    id: 3,
+    tag: { en: "Cities", ca: "Ciutats" },
+    title: { en: "Barcelona in August: a love letter to an empty city", ca: "Barcelona a l'agost: una carta d'amor a una ciutat buida" },
+    date: "18 August 2024",
+    excerpt: {
+      en: "Every August, half the city leaves and the other half pretends not to notice. I've come to love those weeks of quiet more than any other time of year.",
+      ca: "Cada agost, la meitat de la ciutat marxa i l'altra meitat fa veure que no se n'adona. He après a estimar aquelles setmanes de silenci més que qualsevol altra època de l'any."
+    },
+    body: {
+      en: `<p>Barcelonans have a ritual in August. They leave. Not all of them, of course — the city never truly empties — but enough that the streets feel borrowed, quieter, oddly generous with their space.</p><p>The bakery near my apartment, which always has a queue at 9am, is shut. The neighbours whose dog barks on weekend mornings are somewhere in the Pyrenees. Even the pigeons seem fewer, though I suspect that is projection.</p><h3>The city as itself</h3><p>What I find in August is something I lose the rest of the year: the city at its own pace. Barcelona is a noisy, demanding, beautiful place — one that insists on being experienced at high volume. But in August, it relaxes. The architecture speaks for itself without crowds in front of it. The sea is still warm and the light is still long and for a few weeks you can imagine, almost, that the city belongs to you.</p><p>I never want to leave in August. I always forget this by October.</p>`,
+      ca: `<p>Els barcelonins tenen un ritual a l'agost. Se'n van. No tots, és clar — la ciutat mai no es buida del tot — però prou perquè els carrers semblin prestats, més silenciosos, extranyament generosos amb el seu espai.</p><p>La pastisseria prop del meu apartament, que sempre té cua a les 9 del matí, és tancada. Els veïns el gos dels quals borda els matins de cap de setmana són en algun lloc dels Pirineus. Fins i tot els coloms semblen menys, tot i que sospito que és projecció.</p><h3>La ciutat com ella mateixa</h3><p>El que trobo a l'agost és alguna cosa que perdo la resta de l'any: la ciutat al seu propi ritme. Barcelona és un lloc sorollós, exigent, bell — un que insisteix a ser viscut a tot volum. Però a l'agost, es relaxa. L'arquitectura parla per ella mateixa sense multituds davant. La mar encara és càlida i la llum encara és llarga i durant unes setmanes pots imaginar, gairebé, que la ciutat t'és pròpia.</p><p>Mai no vull marxar a l'agost. Sempre ho oblido a l'octubre.</p>`
+    }
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let lang = 'en';
+let currentView = 'academic'; // 'academic' | 'blog' | 'post'
+let currentPost = null;
+
+// ── TRANSLATIONS ──────────────────────────────────────────────────────────
+const T = {
+  en: {
+    nav_about:"About", nav_pub:"Publications", nav_res:"Research", nav_contact:"Contact", nav_blog:"✍ Blog",
+    hero_tag:"Researcher · Academic · Author",
+    hero_sub:"Associate Professor of Linguistics at the University of Barcelona",
+    hero_btn1:"View CV", hero_btn2:"Get in touch",
+    about_title:"About me",
+    about_bio:"I am a researcher specialising in computational linguistics and language acquisition. My work focuses on the intersection of cognitive science and natural language processing.<br><br>I have published extensively in peer-reviewed journals and presented at international conferences across Europe and North America.",
+    dept:"Department of Linguistics", phd_thesis:'Thesis: "Contextual Disambiguation in NLP"', ba_major:"Major: Catalan and Spanish Philology",
+    pub_title:"Publications", abstract1:"This paper investigates how large language models handle contextual ambiguity across multilingual settings.",
+    abstract2:"An empirical study of how adult learners of Catalan use prosodic information during speech perception.",
+    abstract3:"This study examines the role of discourse coherence markers in reading comprehension across three age groups.",
+    res_title:"Research Projects",
+    proj1_title:"MultiLing-AI", proj1_desc:"Developing evaluation frameworks for multilingual AI systems, funded by the European Research Council.",
+    proj2_title:"CatAcquis", proj2_desc:"Longitudinal study of Catalan acquisition in bilingual children aged 3–7 in the Barcelona metropolitan area.",
+    proj3_title:"CohereRead", proj3_desc:"Investigating discourse coherence effects on reading strategies using eye-tracking methodology.",
+    ongoing:"Ongoing", completed:"Completed",
+    contact_title:"Contact", contact_desc:"I am happy to hear from fellow researchers, students, journalists, or anyone interested in my work.",
+    form_name:"Name", form_name_ph:"Your name", form_email:"Email", form_msg:"Message", form_msg_ph:"Your message...", form_send:"Send message",
+    footer:"© 2025 Dr. Jane Smith · University of Barcelona",
+    blog_word:"Blog", blog_back:"← Academic site", blog_back_list:"← All posts",
+    blog_title:"Writing", blog_subtitle:"Personal essays, observations and ideas — separate from my academic work.",
+    blog_disclaimer:"These posts are personal reflections and do not represent my academic institution.",
+    blog_read:"Read more →", blog_footer:"© 2025 Jane Smith"
+  },
+  ca: {
+    nav_about:"Sobre mi", nav_pub:"Publicacions", nav_res:"Recerca", nav_contact:"Contacte", nav_blog:"✍ Blog",
+    hero_tag:"Investigadora · Acadèmica · Autora",
+    hero_sub:"Professora Titular de Lingüística a la Universitat de Barcelona",
+    hero_btn1:"Veure CV", hero_btn2:"Contacta'm",
+    about_title:"Sobre mi",
+    about_bio:"Sóc investigadora especialitzada en lingüística computacional i adquisició del llenguatge. La meva recerca se centra en la intersecció entre les ciències cognitives i el processament del llenguatge natural.<br><br>He publicat àmpliament en revistes revisades per parells i he presentat en conferències internacionals a Europa i Amèrica del Nord.",
+    dept:"Departament de Lingüística", phd_thesis:'Tesi: "Desambiguació Contextual en PLN"', ba_major:"Especialitat: Filologia Catalana i Hispànica",
+    pub_title:"Publicacions", abstract1:"Aquest article investiga com els grans models de llenguatge gestionen l'ambigüitat contextual en contextos multilingües.",
+    abstract2:"Estudi empíric sobre com els adults aprenents de català fan servir la informació prosòdica durant la percepció de la parla.",
+    abstract3:"Aquest estudi examina el paper dels marcadors de coherència discursiva en la comprensió lectora en tres grups d'edat.",
+    res_title:"Projectes de Recerca",
+    proj1_title:"MultiLing-AI", proj1_desc:"Desenvolupament de marcs d'avaluació per a sistemes d'IA multilingüe, finançat pel Consell Europeu de Recerca.",
+    proj2_title:"CatAcquis", proj2_desc:"Estudi longitudinal sobre l'adquisició del català en infants bilingües de 3 a 7 anys a l'àrea metropolitana de Barcelona.",
+    proj3_title:"CohereRead", proj3_desc:"Investigació dels efectes de la coherència discursiva en les estratègies de lectura mitjançant eye-tracking.",
+    ongoing:"En curs", completed:"Completat",
+    contact_title:"Contacte", contact_desc:"M'alegra rebre missatges d'altres investigadors, estudiants, periodistes o qualsevol persona interessada en la meva feina.",
+    form_name:"Nom", form_name_ph:"El teu nom", form_email:"Correu", form_msg:"Missatge", form_msg_ph:"El teu missatge...", form_send:"Enviar missatge",
+    footer:"© 2025 Dr. Jane Smith · Universitat de Barcelona",
+    blog_word:"Blog", blog_back:"← Lloc acadèmic", blog_back_list:"← Tots els articles",
+    blog_title:"Escrits", blog_subtitle:"Assajos personals, observacions i idees — separats de la meva feina acadèmica.",
+    blog_disclaimer:"Aquestes publicacions són reflexions personals i no representen la meva institució acadèmica.",
+    blog_read:"Llegir més →", blog_footer:"© 2025 Jane Smith"
+  }
+};
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function applyLang(l) {
+  const t = T[l];
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const k = el.getAttribute('data-i');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-i_placeholder]').forEach(el => {
+    const k = el.getAttribute('data-i_placeholder');
+    if (t[k] !== undefined) el.placeholder = t[k];
+  });
+  ['langBtn','langBtnBlog','langBtnPost'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.textContent = l === 'en' ? 'CA' : 'EN';
+  });
+  document.documentElement.lang = l;
+  renderBlogList();
+  if (currentPost !== null) renderPost(currentPost);
+}
+
+function renderBlogList() {
+  const t = T[lang];
+  const container = document.getElementById('blogList');
+  container.innerHTML = `
+    <div class="blog-disclaimer">
+      <div class="blog-disclaimer-box">⚠️ &nbsp;<span>${t.blog_disclaimer}</span></div>
+    </div>` +
+    posts.map(p => `
+    <div class="blog-card" onclick="showPost(${p.id})">
+      <div class="blog-card-tag">${p.tag[lang]}</div>
+      <h2>${p.title[lang]}</h2>
+      <p class="excerpt">${p.excerpt[lang]}</p>
+      <div class="blog-card-meta">${p.date} &nbsp;·&nbsp; <span class="read-more">${t.blog_read}</span></div>
+    </div>`).join('');
+}
+
+function renderPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('postContent').innerHTML = `
+    <button class="post-back" onclick="showView('blog')">← ${T[lang].blog_back_list}</button>
+    <div class="post-tag">${p.tag[lang]}</div>
+    <h1 class="post-title">${p.title[lang]}</h1>
+    <div class="post-meta">${p.date}</div>
+    <div class="post-body">${p.body[lang]}</div>`;
+}
+
+function showView(v) {
+  ['academic','blog','post'].forEach(x => {
+    document.getElementById('view-'+x).style.display = x === v ? 'block' : 'none';
+  });
+  currentView = v;
+  window.scrollTo(0, 0);
+}
+
+function showPost(id) {
+  currentPost = id;
+  renderPost(id);
+  showView('post');
+}
+
+// ── EVENTS ────────────────────────────────────────────────────────────────
+document.getElementById('goToBlog').addEventListener('click', () => { renderBlogList(); showView('blog'); });
+document.getElementById('goToAcademic').addEventListener('click', () => showView('academic'));
+document.getElementById('goToBlogList').addEventListener('click', () => showView('blog'));
+
+['langBtn','langBtnBlog','langBtnPost'].forEach(id => {
+  const b = document.getElementById(id);
+  if (b) b.addEventListener('click', () => { lang = lang === 'en' ? 'ca' : 'en'; applyLang(lang); });
+});
+
+function toggleAbstract(btn) {
+  const abs = btn.nextElementSibling;
+  const open = abs.style.display === 'block';
+  abs.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? '▸ Abstract' : '▾ Abstract';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+applyLang('en');
+showView('academic');
+</script>
+</body>
+</html>
