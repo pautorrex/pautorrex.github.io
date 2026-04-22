@@ -101,6 +101,9 @@
   .form-group textarea{resize:vertical;min-height:100px;}
   .submit-btn{background:var(--navy);color:#fff;border:none;padding:12px 24px;border-radius:4px;font-family:'Arial',sans-serif;font-size:.9rem;cursor:pointer;transition:background .2s;width:100%;max-width:220px;}
   .submit-btn:hover{background:var(--accent);}
+  .form-status{margin-top:.9rem;font-family:'Arial',sans-serif;font-size:.85rem;min-height:1.2em;}
+  .form-status.ok{color:#065f46;}
+  .form-status.err{color:#b91c1c;}
   footer.acad-footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:2rem 1rem;font-family:'Arial',sans-serif;font-size:.82rem;}
 
   /* ---------- BLOG NAV ---------- */
@@ -395,12 +398,13 @@
         <a href="#">🔗 ResearchGate</a>
       </div>
     </div>
-    <div>
-      <div class="form-group"><label data-i="form_name">Name</label><input type="text" data-i_placeholder="form_name_ph" placeholder="Your name"/></div>
-      <div class="form-group"><label data-i="form_email">Email</label><input type="email" placeholder="your@email.com"/></div>
-      <div class="form-group"><label data-i="form_msg">Message</label><textarea data-i_placeholder="form_msg_ph" placeholder="Your message..."></textarea></div>
-      <button class="submit-btn" data-i="form_send">Send message</button>
-    </div>
+    <form id="contactForm" novalidate>
+      <div class="form-group"><label data-i="form_name">Name</label><input type="text" id="cfName" name="name" required data-i_placeholder="form_name_ph" placeholder="Your name"/></div>
+      <div class="form-group"><label data-i="form_email">Email</label><input type="email" id="cfEmail" name="email" required placeholder="your@email.com"/></div>
+      <div class="form-group"><label data-i="form_msg">Message</label><textarea id="cfMsg" name="message" required data-i_placeholder="form_msg_ph" placeholder="Your message..."></textarea></div>
+      <button type="submit" class="submit-btn" data-i="form_send">Send message</button>
+      <p id="cfStatus" class="form-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </div>
 
@@ -497,6 +501,12 @@ const T = {
     ongoing:"Ongoing",
     contact_title:"Contact", contact_desc:"Feel free to get in touch for academic collaborations, conference inquiries, or any questions about my research.",
     form_name:"Name", form_name_ph:"Your name", form_email:"Email", form_msg:"Message", form_msg_ph:"Your message...", form_send:"Send message",
+    form_sending:"Sending…",
+    form_err_fields:"Please fill in all fields.",
+    form_err_email:"Please enter a valid email address.",
+    form_err_generic:"Something went wrong. Please try again.",
+    form_err_network:"Network error. Please check your connection and try again.",
+    form_ok:"Thanks! Your message has been sent.",
     footer:"© 2025 Pau Torres · Universitat Pompeu Fabra",
     blog_word:"Blog", blog_back:"← Academic site", blog_back_list:"← All posts",
     blog_title:"Writing", blog_subtitle:"Personal essays, observations and ideas — separate from my academic work.",
@@ -529,6 +539,12 @@ const T = {
     ongoing:"En curs",
     contact_title:"Contacte", contact_desc:"No dubtis a posar-te en contacte per a col·laboracions acadèmiques, participació en conferències o qualsevol pregunta sobre la meva recerca.",
     form_name:"Nom", form_name_ph:"El teu nom", form_email:"Correu", form_msg:"Missatge", form_msg_ph:"El teu missatge...", form_send:"Enviar missatge",
+    form_sending:"Enviant…",
+    form_err_fields:"Si us plau, omple tots els camps.",
+    form_err_email:"Si us plau, introdueix un correu vàlid.",
+    form_err_generic:"Alguna cosa ha fallat. Torna-ho a provar.",
+    form_err_network:"Error de xarxa. Comprova la connexió i torna-ho a provar.",
+    form_ok:"Gràcies! El teu missatge s'ha enviat correctament.",
     footer:"© 2025 Pau Torres · Universitat Pompeu Fabra",
     blog_word:"Blog", blog_back:"← Lloc acadèmic", blog_back_list:"← Tots els articles",
     blog_title:"Escrits", blog_subtitle:"Assajos personals, observacions i idees — separats de la meva feina acadèmica.",
@@ -620,6 +636,64 @@ document.getElementById('goToBlogList').addEventListener('click', () => showView
 ['langBtn','langBtnBlog','langBtnPost'].forEach(id => {
   const b = document.getElementById(id);
   if (b) b.addEventListener('click', () => { lang = lang === 'en' ? 'ca' : 'en'; applyLang(lang); });
+});
+
+/* ---------- CONTACT FORM (Formspree) ---------- */
+// TODO: substitueix 'xxxxxxxx' pel teu ID de Formspree (mira https://formspree.io)
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mjgjazyl';
+
+document.getElementById('contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const nameEl = document.getElementById('cfName');
+  const emailEl = document.getElementById('cfEmail');
+  const msgEl = document.getElementById('cfMsg');
+  const status = document.getElementById('cfStatus');
+  const btn = e.target.querySelector('.submit-btn');
+  const t = T[lang];
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim();
+  const msg = msgEl.value.trim();
+
+  if (!name || !email || !msg) {
+    status.textContent = t.form_err_fields;
+    status.className = 'form-status err';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    status.textContent = t.form_err_email;
+    status.className = 'form-status err';
+    return;
+  }
+
+  btn.disabled = true;
+  const originalBtnText = btn.textContent;
+  btn.textContent = t.form_sending;
+  status.textContent = '';
+  status.className = 'form-status';
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(e.target)
+    });
+    if (res.ok) {
+      status.textContent = t.form_ok;
+      status.className = 'form-status ok';
+      e.target.reset();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      status.textContent = (data.errors && data.errors[0] && data.errors[0].message) || t.form_err_generic;
+      status.className = 'form-status err';
+    }
+  } catch (err) {
+    status.textContent = t.form_err_network;
+    status.className = 'form-status err';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalBtnText;
+  }
 });
 
 applyLang('en');
