@@ -388,14 +388,23 @@
 
 <div class="acad-section" id="contact">
   <h2 class="sh"><span class="section-copy" data-i="contact_title">Contact</span><span class="section-line"></span></h2>
-  <div class="contact-info">
-    <p data-i="contact_desc">Feel free to get in touch for academic collaborations, conference inquiries, or any questions about my research.</p>
-    <div class="contact-links">
-      <a href="mailto:pautorresmenendez@gmail.com">✉ pautorresmenendez@gmail.com</a>
-      <a href="#">🔗 ORCID Profile</a>
-      <a href="#">🔗 Google Scholar</a>
-      <a href="#">🔗 ResearchGate</a>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p data-i="contact_desc">Feel free to get in touch for academic collaborations, conference inquiries, or any questions about my research.</p>
+      <div class="contact-links">
+        <a href="mailto:pautorresmenendez@gmail.com">✉ pautorresmenendez@gmail.com</a>
+        <a href="#">🔗 ORCID Profile</a>
+        <a href="#">🔗 Google Scholar</a>
+        <a href="#">🔗 ResearchGate</a>
+      </div>
     </div>
+    <form id="contactForm" novalidate>
+      <div class="form-group"><label data-i="form_name">Name</label><input type="text" id="cfName" name="name" required data-i_placeholder="form_name_ph" placeholder="Your name"/></div>
+      <div class="form-group"><label data-i="form_email">Email</label><input type="email" id="cfEmail" name="email" required placeholder="your@email.com"/></div>
+      <div class="form-group"><label data-i="form_msg">Message</label><textarea id="cfMsg" name="message" required data-i_placeholder="form_msg_ph" placeholder="Your message..."></textarea></div>
+      <button type="submit" class="submit-btn" data-i="form_send">Send message</button>
+      <p id="cfStatus" class="form-status" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </div>
 
@@ -627,6 +636,63 @@ document.getElementById('goToBlogList').addEventListener('click', () => showView
 ['langBtn','langBtnBlog','langBtnPost'].forEach(id => {
   const b = document.getElementById(id);
   if (b) b.addEventListener('click', () => { lang = lang === 'en' ? 'ca' : 'en'; applyLang(lang); });
+});
+
+/* ---------- CONTACT FORM (Formspree) ---------- */
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mjgjazyl';
+
+document.getElementById('contactForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const nameEl = document.getElementById('cfName');
+  const emailEl = document.getElementById('cfEmail');
+  const msgEl = document.getElementById('cfMsg');
+  const status = document.getElementById('cfStatus');
+  const btn = e.target.querySelector('.submit-btn');
+  const t = T[lang];
+
+  const name = nameEl.value.trim();
+  const email = emailEl.value.trim();
+  const msg = msgEl.value.trim();
+
+  if (!name || !email || !msg) {
+    status.textContent = t.form_err_fields;
+    status.className = 'form-status err';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    status.textContent = t.form_err_email;
+    status.className = 'form-status err';
+    return;
+  }
+
+  btn.disabled = true;
+  const originalBtnText = btn.textContent;
+  btn.textContent = t.form_sending;
+  status.textContent = '';
+  status.className = 'form-status';
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(e.target)
+    });
+    if (res.ok) {
+      status.textContent = t.form_ok;
+      status.className = 'form-status ok';
+      e.target.reset();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      status.textContent = (data.errors && data.errors[0] && data.errors[0].message) || t.form_err_generic;
+      status.className = 'form-status err';
+    }
+  } catch (err) {
+    status.textContent = t.form_err_network;
+    status.className = 'form-status err';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalBtnText;
+  }
 });
 
 applyLang('en');
